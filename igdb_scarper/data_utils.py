@@ -1,12 +1,22 @@
 import json
 from pytube import YouTube
 import pandas as pd
+import requests
 
 
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
     yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+
+
+def download_image(id_image, out, size = 'thumb'):
+    #thumb for thumbnails
+    #original for original size
+    image_url = 'https://images.igdb.com/igdb/image/upload/t_' + str(size) + '/' +str(id_image)+'.jpg'
+    img_data = requests.get(image_url).content
+    with open(out, 'wb') as handler:
+        handler.write(img_data)
 
 
 def read_json_string(json_string):

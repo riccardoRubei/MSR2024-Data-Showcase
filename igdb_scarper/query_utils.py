@@ -20,8 +20,38 @@ def build_query_video(game_id):
     return "fields video_id,name; where game=" + str(game_id) + ";"
 
 
-def get_screenshots():
+def build_query_screenshots(game_id):
+    return f"fields image_id,url,width; where game={game_id};"
+
+
+def get_screenshots(data,outpath):
+    df_games = pd.read_csv(data, sep=',')
+    df = pd.DataFrame(columns=['id_game','image_id','url','width'])
+    for game in df_games['id'].unique():
+        q = build_query_screenshots(game)
+        header = {'headers': {'Client-ID': cf.CLIENT_ID,
+                                  'Authorization': 'Bearer ' + cf.token},
+                      'data': q}
+    
+
+        response = post(cf.SCREENSHOTS_URL, **header)
+
+        res = pd.DataFrame(response.json())
+
+        if len(res) > 0:
+            res['id_game'] = game
+
+            res['url'] = res['url'].str[2:]
+
+            df = pd.concat([df,res],axis=0)
+
+        time.sleep(1)
+
+    df = df.rename(columns={'image_id':'id_image'})
+
+    df.to_csv(outpath, index=False)
     return
+
 
 
 def get_genres():
