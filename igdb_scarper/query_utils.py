@@ -55,9 +55,10 @@ def get_screenshots(data,outpath):
     return
 
 def get_time(game_name):
-    ## Returns tuples of 0 if game is not found
+    ## Returns a df [title_found, main, extra, completionist]. Returns tuple of 0 if not found.
+    
     res = HowLongToBeat().search(game_name, similarity_case_sensitive=False)
-    times = {'title_found': res[0].game_name, 'main' : res[0].main_story, 'extra': res[0].main_extra, 'completionist': res[0].completionist} if len(res) > 0 else {'main':0, 'extra':0, 'completionist':0}
+    times = {'title_found': res[0].game_name, 'main' : res[0].main_story, 'extra': res[0].main_extra, 'completionist': res[0].completionist} if len(res) > 0 else {'title_found': 'Not_Found', 'main':0, 'extra':0, 'completionist':0}
     
     times = pd.DataFrame(times, index=[0])
     return times
