@@ -17,7 +17,7 @@ def get_games_metadata(list_platform, list_ranges):
 
 
 if __name__ == '__main__':
-    get_video_ids('data/Playstation_all/PlayStation_games_rating_between_76_100.csv', 'video_ps_76_100.csv')
+    get_video_ids('raw_data_IGDB/PlayStation_all/PlayStation_games_rating_between_0_25.csv', 'video_ps_0_25.csv')
 
 
 

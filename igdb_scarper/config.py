@@ -22,12 +22,16 @@ PC = "PC"
 
 # local dirs
 
-PATH_PL = "data/" + PL + '/'
-PATH_NT = "data/" + NT + '/'
-PATH_XB = "data/" + XB + '/'
-PATH_PC = "data/" + PC + '/'
+PATH_PL = "raw_data_IGDB/" + PL + '/'
+PATH_NT = "raw_data_IGDB/" + NT + '/'
+PATH_XB = "raw_data_IGDB/" + XB + '/'
+PATH_PC = "raw_data_IGDB/" + PC + '/'
+
+
+
 
 PATH_PLATFORMS = "platforms.csv"
+PATH_RATINGS= "/igdb_scarper/raw_data_IGDB\\PlayStation_all\\PlayStation_games_rating_between_0_25.csv"
 
 # auth config
 token = "bty0p3wvcq7bmvayacu7d5r20r3az7"
