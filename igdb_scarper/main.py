@@ -1,23 +1,27 @@
-from query_utils import get_games_by_platform, get_video_ids
-from data_utils import download_video
+import pandas as pd
+
+import query_utils as qu
+import data_utils as du
 import config as cf
+import time
 
-import  time
 
-
-def get_games_metadata(list_platform, list_ranges):
-
-    get_games_by_platform(platform=cf.XB, outdir=cf.PATH_XB, rating_range=(0, 25))
+def get_games_metadata():
+    qu.get_games_by_platform(platform=cf.XB, out_dir=cf.PATH_XB, rating_range=(75, 100), is_family=False)
     time.sleep(5)
-    get_games_by_platform(platform=cf.XB, outdir=cf.PATH_XB, rating_range=(26, 50))
-    time.sleep(5)
-    get_games_by_platform(platform=cf.XB, outdir=cf.PATH_XB, rating_range=(51, 76))
-    time.sleep(5)
-    get_games_by_platform(platform=cf.XB, outdir=cf.PATH_XB, rating_range=(76, 100))
+    # qu.get_games_by_platform(platform=cf.XB, out_dir=cf.PATH_XB, rating_range=(0, 25))
+    # time.sleep(5)
+    # qu.get_games_by_platform(platform=cf.XB, out_dir=cf.PATH_XB, rating_range=(0, 25))
+    # time.sleep(5)
+    # qu.get_games_by_platform(platform=cf.XB, out_dir=cf.PATH_XB, rating_range=(0, 25))
 
 
 if __name__ == '__main__':
-    get_video_ids('raw_data_IGDB/PlayStation_all/PlayStation_games_rating_between_0_25.csv', 'video_ps_0_25.csv')
+    qu.get_video_ids('raw_data_IGDB/PlayStation_all/PlayStation_games_rating_between_76_100.csv', 'video_ps_76_100.csv', 'video_cat.csv')
+    df_video = pd.read_csv('video_ps_76_100.csv', sep=',')
+    #print(df_video.shape)
+    #print(qu.get_platform_id_by_name('PlayStation 2', 'platforms.csv'))
+    #get_games_metadata()
 
 
 

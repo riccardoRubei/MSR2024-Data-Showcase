@@ -19,7 +19,7 @@ from howlongtobeatpy import HowLongToBeat
 
 
 def build_query_video(game_id):
-    return "fields video_id,name; where game=" + str(game_id) + ";"
+    return f"fields video_id,name,game; where game= {game_id} ;"
 
 
 def build_query_screenshots(game_id):
@@ -70,35 +70,50 @@ def get_genres():
     df_genres.to_csv('genres.csv', index=False)
 
 
-def build_header_games(platform,rating_range):
-    ids = get_platform_id(cf.PATH_PLATFORMS, platform)
-    q = build_query_games(ids, rating_range[0] , rating_range[1])
-    header = {'headers': {'Client-ID': cf.CLIENT_ID,
-                          'Authorization': 'Bearer ' + cf.token},
-              'data': q}
+def build_header_games(platform,rating_range, is_family):
+    if is_family:
+        ids = get_platform_list_id(cf.PATH_PLATFORMS, platform)
+        q = build_query_games(ids, rating_range[0] , rating_range[1])
+        header = {'headers': {'Client-ID': cf.CLIENT_ID,
+                              'Authorization': 'Bearer ' + cf.token},
+                  'data': q}
+    else:
+        single_id = get_platform_id_by_name(cf.PATH_PLATFORMS, platform)
+        q = build_query_games_single_platform(single_id, rating_range[0], rating_range[1])
+        header = {'headers': {'Client-ID': cf.CLIENT_ID,
+                              'Authorization': 'Bearer ' + cf.token},
+                  'data': q}
     return header
 
 
-def get_video_ids(data, outpath):
+def get_video_ids(data, out_game, out_video):
     df_games = pd.read_csv(data, sep=',')
-    with open(outpath, 'a', encoding='utf8', errors='ignore') as res:
-        res.write("id_game,id_video\n")
-        for game_id in df_games['id'].values:
-            q = build_query_video(game_id)
-            header = {'headers': {'Client-ID': cf.CLIENT_ID,
-                                  'Authorization': 'Bearer ' + cf.token},
-                      'data': q}
 
-            response = post(cf.VIDEOS_URL, **header)
+    with open(out_video, 'w', encoding='utf8',errors='ignore') as video_file:
+        with open(out_game, 'w', encoding='utf8', errors='ignore') as game_file:
+            game_file.write("id_game,id_video\n")
+            video_file.write("id_video,name\n")
+            for game_id in df_games['id'].values:
+                list_video_id = []
+                q = build_query_video(game_id)
+                header = {'headers': {'Client-ID': cf.CLIENT_ID,
+                                      'Authorization': 'Bearer ' + cf.token},
+                          'data': q}
 
-            if len(response.json()) > 0:
-                for v in response.json():
-                    print("Writing id")
-                    res.write(str(v['id'])+','+str(v['video_id'])+'\n')
+                response = post(cf.VIDEOS_URL, **header)
 
-            else:
-                print("No video")
-            time.sleep(5)
+                if len(response.json()) > 0:
+
+                    for v in response.json():
+                        print("Writing id")
+                        url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
+                        list_video_id.append(url_video)
+                        video_file.write(f"{url_video},{v['name']}\n")
+                    video_ids = '#'.join(list_video_id)
+                    game_file.write(f"{v['game']},{video_ids} \n")
+                else:
+                    print("No video")
+                time.sleep(5)
 
 # old function
 # def query_selector(item_type):
@@ -138,8 +153,25 @@ def build_query_games(plat_ids,min_rate, max_rate):
     return str_query
 
 
-def get_games_by_platform(platform, outdir, rating_range):
-    response = post(cf.GAMES_URL, **build_header_games(platform, rating_range))
+def build_query_games_single_platform(plat_id,min_rate, max_rate):
+    str_query = "fields name,platforms,rating,genres,summary,storyline; where platforms =" + str(plat_id)
+    str_query += "& rating > " + str(min_rate)+" & rating < "+str(max_rate)+" ; sort rating desc; limit 500;"
+    return str_query
+
+
+def get_platform_id_by_name(platform_data,platform_name):
+    df_platform = pd.read_csv(platform_data)
+    df_platform.set_index('name', inplace=True)
+    platform_id = 0
+    for idx, row in df_platform.iterrows():
+        if idx == platform_name:
+            platform_id = row['id']
+
+    return platform_id
+
+
+def get_games_by_platform(platform, out_dir, rating_range, is_family):
+    response = post(cf.GAMES_URL, **build_header_games(platform, rating_range, is_family))
     df_games = pd.read_json(io.StringIO(read_json_string(response)), orient='records')
 
     if 'summary' in df_games.columns:
@@ -150,9 +182,9 @@ def get_games_by_platform(platform, outdir, rating_range):
     for col in df_games.columns.values:
         if has_nan(df_games,col):
             df_games = replace_nan_with_string(df_games, col, "Missing")
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
-    df_games.to_csv(build_filename_string(outdir,platform,rating_range), index=False)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    df_games.to_csv(build_filename_string(out_dir,platform,rating_range), index=False)
 
 
 def get_platform_ids():
@@ -164,7 +196,7 @@ def get_platform_ids():
         for platform in json_file:
             res.write(str(platform.get('id')) + ',' + str(platform.get('name')) + '\n')
 
-def get_platform_id(csv, type):
+def get_platform_list_id(csv, type):
     df_play = pd.read_csv(csv, sep=',')
     list_ids = []
     for key, plat in zip(df_play['id'], df_play['name']):
