@@ -10,10 +10,13 @@ def download_video(id_video):
     yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
 
 
-def download_image(id_image, out, size = 'thumb'):
+def download_image(image_url, out, size = 'thumb'):
     #thumb for thumbnails
     #original for original size
-    image_url = 'https://images.igdb.com/igdb/image/upload/t_' + str(size) + '/' +str(id_image)+'.jpg'
+
+    if 'https' not in image_url:
+        image_url = 'https://' + image_url
+
     img_data = requests.get(image_url).content
     with open(out, 'wb') as handler:
         handler.write(img_data)
