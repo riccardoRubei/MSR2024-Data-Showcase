@@ -44,3 +44,15 @@ def replace_nan_with_string(df, column_name, replace_with="Missing"):
 def has_nan(df, column_name):
     """Check if a column in a dataframe has NaN values."""
     return df[column_name].isnull().any()
+
+
+def generate_range_ratings(start, end, delta):
+    tuple_list = []
+    current = start
+    while current <= end - delta:
+        tuple_list.append((current, current + delta))
+        current += delta
+    return tuple_list
+
+# Use the function to generate tuples from 0 to 100 with a delta of 10
+

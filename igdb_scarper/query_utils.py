@@ -181,7 +181,7 @@ def build_query_games(plat_ids, min_rate, max_rate):
 
 
 
-def get_games_by_platform(platform, outdir, rating_range):
+def get_games_by_platform(platform, out_dir, rating_range):
     response = post(cf.GAMES_URL, **build_header_games(platform, rating_range))
     df_games = pd.read_json(io.StringIO(read_json_string(response)), orient='records')
 
@@ -193,9 +193,10 @@ def get_games_by_platform(platform, outdir, rating_range):
     for col in df_games.columns.values:
         if has_nan(df_games,col):
             df_games = replace_nan_with_string(df_games, col, "Missing")
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
-    df_games.to_csv(build_filename_string(outdir,platform,rating_range), index=False)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    df_games.to_csv(build_filename_string(out_dir,platform,rating_range), index=False)
+    print("writing files")
 
 
 def get_platform_ids():
