@@ -156,7 +156,7 @@ def get_video_ids(data, outpath):
 #                     print("no video")
 #                 time.sleep(8)
 
-
+'''
 def build_query_games(plat_ids,min_rate, max_rate):
     str_query = "fields name,platforms,rating,genres,summary,storyline; where ("
     i = 0
@@ -167,8 +167,18 @@ def build_query_games(plat_ids,min_rate, max_rate):
             str_query += "platforms = " + str(key)
         i += 1
 
+    
+
     str_query += ") & rating > " + str(min_rate)+" & rating < "+str(max_rate)+" ; sort rating desc; limit 500;"
     return str_query
+'''
+
+
+def build_query_games(plat_ids, min_rate, max_rate):
+    str_query = f"fields name,platforms,rating,genres,summary,storyline; where platforms=({','.join(str(i) for i in list(set(plat_ids)))}) & rating > {str(min_rate)} & rating < {str(max_rate)}; sort rating desc; limit 500;"
+    
+    return str_query
+
 
 
 def get_games_by_platform(platform, outdir, rating_range):
