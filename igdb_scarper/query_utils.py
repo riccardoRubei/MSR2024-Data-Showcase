@@ -175,7 +175,7 @@ def build_query_games(plat_ids,min_rate, max_rate):
 
 
 def build_query_games(plat_ids, min_rate, max_rate):
-    str_query = f"fields name,platforms,rating,genres,summary,storyline; where platforms=({','.join(str(i) for i in list(set(plat_ids)))}) & rating > {str(min_rate)} & rating < {str(max_rate)}; sort rating desc; limit 500;"
+    str_query = f"fields name,platforms,rating,genres,summary,storyline, first_release_date; where platforms=({','.join(str(i) for i in list(set(plat_ids)))}) & first_release_date >= {str(min_rate)} & first_release_date < {str(max_rate)}; sort rating desc; limit 500;"
     
     return str_query
 

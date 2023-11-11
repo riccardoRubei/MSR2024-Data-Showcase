@@ -6,16 +6,23 @@ import config as cf
 import time
 
 
-def get_games_metadata():
-    ranges = du.generate_range_ratings(0, 100, 10)
-
+def get_games_metadata(platform_list, platform_paths):
+    #ranges = du.generate_range_ratings(65, 70, 1)
+    ranges = du.generate_date_intervals_unix()
     for r in ranges:
-        qu.get_games_by_platform(platform=cf.NT, out_dir=cf.PATH_NT, rating_range=r)
-        time.sleep(5)
+        for plat, path in zip(platform_list, platform_paths):
+            print("downloading ", plat)
+            qu.get_games_by_platform(platform=plat, out_dir=path, rating_range=r)
+            time.sleep(10)
 
 
 if __name__ == '__main__':
-    get_games_metadata()
+
+    platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
+    paths = [cf.PATH_XB_TEMP, cf.PATH_PL_TEMP, cf.PATH_PC_TEMP, cf.PATH_NT_TEMP]
+    #get_games_metadata(platforms, paths)
+    du.compute_stats(platforms, paths)
+
 
     #qu.get_video_ids('raw_data_IGDB/PlayStation_all/PlayStation_games_rating_between_76_100.csv', 'video_ps_76_100.csv', 'video_cat.csv')
     #df_video = pd.read_csv('video_ps_76_100.csv', sep=',')

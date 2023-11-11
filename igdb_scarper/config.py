@@ -26,6 +26,14 @@ PATH_PL = "raw_data_IGDB/" + PL + '/'
 PATH_NT = "raw_data_IGDB/" + NT + '/'
 PATH_XB = "raw_data_IGDB/" + XB + '/'
 PATH_PC = "raw_data_IGDB/" + PC + '/'
+
+PATH_PL_TEMP = "IGDB_metadata/" + PL + '/'
+PATH_NT_TEMP = "IGDB_metadata/" + NT + '/'
+PATH_XB_TEMP = "IGDB_metadata/" + XB + '/'
+PATH_PC_TEMP = "IGDB_metadata/" + PC + '/'
+
+
+
 PATH_SCREENSHOTS = "screenshots"
 PATH_GENRES = "raw_data_IGDB/genres.csv"
 
