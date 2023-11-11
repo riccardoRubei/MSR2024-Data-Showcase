@@ -19,7 +19,7 @@ from howlongtobeatpy import HowLongToBeat
 
 
 def build_query_video(game_id):
-    return "fields video_id,name; where game=" + str(game_id) + ";"
+    return "fields video_id,name,game; where game=" + str(game_id) + ";"
 
 
 def build_query_screenshots(game_id):
@@ -111,27 +111,33 @@ def build_header_games(platform,rating_range):
               'data': q}
     return header
 
-
-def get_video_ids(data, outpath):
+def get_video_ids(data, out_game, out_video):
     df_games = pd.read_csv(data, sep=',')
-    with open(outpath, 'a', encoding='utf8', errors='ignore') as res:
-        res.write("id_game,id_video\n")
-        for game_id in df_games['id'].values:
-            q = build_query_video(game_id)
-            header = {'headers': {'Client-ID': cf.CLIENT_ID,
-                                  'Authorization': 'Bearer ' + cf.token},
-                      'data': q}
+    with open(out_video, 'w', encoding='utf8',errors='ignore') as video_file:
+        with open(out_game, 'w', encoding='utf8', errors='ignore') as game_file:
+            game_file.write("id_game,id_video\n")
+            video_file.write("id_video,name\n")
+            for game_id in df_games['id'].values:
+                list_video_id = []
+                q = build_query_video(game_id)
+                header = {'headers': {'Client-ID': cf.CLIENT_ID,
+                                      'Authorization': 'Bearer ' + cf.token},
+                          'data': q}
 
-            response = post(cf.VIDEOS_URL, **header)
+                response = post(cf.VIDEOS_URL, **header)
 
-            if len(response.json()) > 0:
-                for v in response.json():
-                    print("Writing id")
-                    res.write(str(v['id'])+','+str(v['video_id'])+'\n')
+                if len(response.json()) > 0:
 
-            else:
-                print("No video")
-            time.sleep(5)
+                    for v in response.json():
+                        print("Writing id")
+                        url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
+                        list_video_id.append(url_video)
+                        video_file.write(f"{url_video},{v['name']}\n")
+                    video_ids = '#'.join(list_video_id)
+                    game_file.write(f"{v['game']},{video_ids} \n")
+                else:
+                    print("No video")
+                time.sleep(5)
 
 # old function
 # def query_selector(item_type):

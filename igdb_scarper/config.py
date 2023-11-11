@@ -5,7 +5,7 @@ GENRES_URL = "https://api.igdb.com/v4/genres"
 VIDEOS_URL = "https://api.igdb.com/v4/game_videos"
 SCREENSHOTS_URL = "https://api.igdb.com/v4/screenshots"
 SEARCH_URL = "https://api.igdb.com/v4/search"
-
+YOU_TUBE_URL = "http://youtube.com/watch?v="
 
 # query keywords
 QUERY_HEAD = "fields "

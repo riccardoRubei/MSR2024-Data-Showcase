@@ -21,14 +21,13 @@ if __name__ == '__main__':
     platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
     paths = [cf.PATH_XB_TEMP, cf.PATH_PL_TEMP, cf.PATH_PC_TEMP, cf.PATH_NT_TEMP]
     #get_games_metadata(platforms, paths)
-    du.compute_stats(platforms, paths)
+    #du.compute_stats(platforms, paths)
 
 
-    #qu.get_video_ids('raw_data_IGDB/PlayStation_all/PlayStation_games_rating_between_76_100.csv', 'video_ps_76_100.csv', 'video_cat.csv')
+    qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')
     #df_video = pd.read_csv('video_ps_76_100.csv', sep=',')
-    #print(df_video.shape)
-    #print(qu.get_platform_id_by_name('PlayStation 2', 'platforms.csv'))
-    #get_games_metadata()
+
+
 
 
 
