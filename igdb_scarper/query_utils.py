@@ -66,24 +66,41 @@ def get_all_screenshots(df_path):
     #create directory if not exists
     if not os.path.exists(cf.PATH_SCREENSHOTS):
         os.makedirs(cf.PATH_SCREENSHOTS)
+    errors = pd.read_csv("errors.csv")
 
     df = pd.read_csv(df_path)
     for index,row in df.iterrows():
         id = row['id']
-        
+
         genres = ast.literal_eval(row['genres']) if row['genres'] != 'Missing' else []
         
         screenshots = get_screenshot(id)
 
+        i = 0
         for _,row in screenshots.iterrows():
+            
+            i += 1
+            if i ==50:
+                time.sleep(2)
+                i = 0
+
+            id = row['id_game']
+
             screenshot = row['url']
             id_image = row['id_image']
+            outs = []
             for g in genres:
                 genre = genres_dict.loc[genres_dict.id == g, 'name'].item()
                 if not os.path.exists(os.path.join(cf.PATH_SCREENSHOTS,"genres",str(genre))):
                     os.makedirs(os.path.join(cf.PATH_SCREENSHOTS,"genres",str(genre)))
 
-                download_image(screenshot, os.path.join( cf.PATH_SCREENSHOTS, "genres" , str(genre) ,f"gameid_{id}_img_{id_image}.jpg"), size='thumbnail')
+                outs.append( os.path.join( cf.PATH_SCREENSHOTS, "genres" , str(genre) ,f"gameid_{id}_img_{id_image}.jpg") )
+            
+            try:
+                download_image(screenshot, outs, size='thumbnail')
+            except Exception as ex: 
+                errors = pd.concat([errors, pd.DataFrame({'id_game':id, 'id_image':id_image,'reason':type(ex).__name__, 'reason_args':ex.args})])
+                errors.to_csv("errors.csv")
 
 
 
@@ -92,7 +109,9 @@ def get_time(game_name):
     ## Returns a df [title_found, main, extra, completionist]. Returns tuple of 0 if not found.
     
     res = HowLongToBeat().search(game_name, similarity_case_sensitive=False)
-
+    if res is None:
+        pd.read_csv("none_times.csv").append({'id_game':game_name, 'reason':'Not found on hl2b'}, ignore_index=True).to_csv("none_times.csv")
+        return pd.DataFrame({'name': game_name, 'title_found':'Not found on hl2b', 'main':0, 'extra':0, 'completionist':0, 'review_score': 0, 'review_count': 0, 'people_polled': 0}, index=[0])
     times = {'name': game_name, 'title_found': res[0].game_name, 'main' : res[0].main_story, 'extra': res[0].main_extra, 'completionist': res[0].completionist, 'review_score': res[0].review_score, 
              'review_count': res[0].review_count, 'people_polled': res[0].people_polled} if len(res) > 0 else {'name': game_name, 'title_found':'Not found on hl2b', 'main':0, 'extra':0, 'completionist':0, 'review_score': 0, 'review_count': 0, 'people_polled': 0}
     

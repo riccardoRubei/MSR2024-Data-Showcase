@@ -40,7 +40,7 @@ PATH_PC_VIDEOS = "videos/" + PC + '/'
 
 
 PATH_SCREENSHOTS = "screenshots"
-PATH_GENRES = "raw_data_IGDB/genres.csv"
+PATH_GENRES = "genres.csv"
 
 
 
