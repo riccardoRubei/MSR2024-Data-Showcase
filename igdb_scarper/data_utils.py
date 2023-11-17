@@ -3,22 +3,33 @@ from pytube import YouTube
 import pandas as pd
 import requests, os
 from pandas.errors import EmptyDataError
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
     yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
 
 
-def download_image(image_url, out, size = 'thumb'):
+def download_image(image_url, outs, size = 'thumb'):
     #thumb for thumbnails
     #original for original size
 
     if 'https' not in image_url:
         image_url = 'https://' + image_url
 
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     img_data = requests.get(image_url).content
-    with open(out, 'wb') as handler:
-        handler.write(img_data)
+    
+    for out in outs:
+        with open(out, 'wb') as handler:
+            handler.write(img_data)
+            handler.close()
 
 
 def read_json_string(json_string):

@@ -35,7 +35,7 @@ PATH_PC_TEMP = "IGDB_metadata/" + PC + '/'
 
 
 PATH_SCREENSHOTS = "screenshots"
-PATH_GENRES = "raw_data_IGDB/genres.csv"
+PATH_GENRES = "genres.csv"
 
 
 
