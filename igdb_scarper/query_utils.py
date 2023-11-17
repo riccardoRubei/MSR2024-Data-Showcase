@@ -6,6 +6,9 @@ import ast
 from data_utils import *
 import time
 from howlongtobeatpy import HowLongToBeat
+from http.client import RemoteDisconnected
+from urllib3.exceptions import MaxRetryError
+from requests.exceptions import ConnectionError, Timeout
 
 
 # def generate_query_video_temp():
@@ -19,7 +22,7 @@ from howlongtobeatpy import HowLongToBeat
 
 
 def build_query_video(game_id):
-    return "fields video_id,name,game; where game=" + str(game_id) + ";"
+    return f"fields video_id,name,game; where game= {game_id} ;"
 
 
 def build_query_screenshots(game_id):
@@ -111,33 +114,69 @@ def build_header_games(platform,rating_range):
               'data': q}
     return header
 
-def get_video_ids(data, out_game, out_video):
-    df_games = pd.read_csv(data, sep=',')
-    with open(out_video, 'w', encoding='utf8',errors='ignore') as video_file:
-        with open(out_game, 'w', encoding='utf8', errors='ignore') as game_file:
-            game_file.write("id_game,id_video\n")
-            video_file.write("id_video,name\n")
-            for game_id in df_games['id'].values:
-                list_video_id = []
-                q = build_query_video(game_id)
-                header = {'headers': {'Client-ID': cf.CLIENT_ID,
-                                      'Authorization': 'Bearer ' + cf.token},
-                          'data': q}
+def get_video_ids(src, out_path):
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
 
-                response = post(cf.VIDEOS_URL, **header)
+    with open(out_path + 'video_cat.csv', 'a', encoding='utf8', errors='ignore') as video_file, \
+         open(out_path + 'video_ids.csv', 'a', encoding='utf8', errors='ignore') as game_file:
 
-                if len(response.json()) > 0:
+        df_videos = pd.read_csv(out_path + 'video_ids.csv')
 
-                    for v in response.json():
-                        print("Writing id")
-                        url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
-                        list_video_id.append(url_video)
-                        video_file.write(f"{url_video},{v['name']}\n")
-                    video_ids = '#'.join(list_video_id)
-                    game_file.write(f"{v['game']},{video_ids} \n")
-                else:
-                    print("No video")
-                time.sleep(5)
+        for data in os.listdir(src):
+            try:
+                df_games = pd.read_csv(src + data, sep=',')
+                for game_id in df_games['id'].values:
+                    if game_id in df_videos['id_game'].values:
+                        print("already downloaded")
+                        continue
+
+                    list_video_id = []
+                    q = build_query_video(game_id)
+                    header = {
+                        'headers': {
+                            'Client-ID': cf.CLIENT_ID,
+                            'Authorization': 'Bearer ' + cf.token
+                        },
+                        'data': q
+                    }
+
+                    for attempt in range(cf.MAX_RETRIES):
+
+                        try:
+                            response = post(cf.VIDEOS_URL, **header)
+
+                            break
+                        except (ConnectionError, Timeout, MaxRetryError) as e:
+                            print(f"Network error occurred: {e}")
+                            # Optional: Implement a retry mechanism or continue to the next iteration
+                            print(f"Attempt {attempt + 1} failed: {e}")
+                            if attempt < cf.MAX_RETRIES - 1:
+                                print(f"Retrying in {cf.RETRY_INTERVAL} seconds...")
+                                time.sleep(cf.RETRY_INTERVAL)
+                            else:
+                                print("Max retries reached, moving to the next item.")
+                                break
+                            continue
+
+                    if len(response.json()) > 0:
+                        for v in response.json():
+                            print("Writing id")
+                            if 'video_id' in v.keys():
+                                url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
+                                list_video_id.append(url_video)
+                            if 'name' in v.keys():
+                                video_file.write(f"{url_video},{v['name']}\n")
+                        video_ids = '#'.join(list_video_id)
+                        game_file.write(f"{v['game']},{video_ids}\n")
+                    else:
+                        game_file.write(f"{game_id},Missing\n")
+                        print("No video")
+                    time.sleep(1)
+
+            except RemoteDisconnected as e:
+                print(f"Error occurred: {e}")
+
 
 # old function
 # def query_selector(item_type):

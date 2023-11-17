@@ -32,6 +32,11 @@ PATH_NT_TEMP = "IGDB_metadata/" + NT + '/'
 PATH_XB_TEMP = "IGDB_metadata/" + XB + '/'
 PATH_PC_TEMP = "IGDB_metadata/" + PC + '/'
 
+PATH_PL_VIDEOS = "videos/" + PL + '/'
+PATH_NT_VIDEOS = "videos/" + NT + '/'
+PATH_XB_VIDEOS = "videos/" + XB + '/'
+PATH_PC_VIDEOS = "videos/" + PC + '/'
+
 
 
 PATH_SCREENSHOTS = "screenshots"
@@ -41,6 +46,13 @@ PATH_GENRES = "raw_data_IGDB/genres.csv"
 
 PATH_PLATFORMS = "platforms.csv"
 PATH_RATINGS= "/igdb_scarper/raw_data_IGDB\\PlayStation_all\\PlayStation_games_rating_between_0_25.csv"
+
+
+#error handling
+
+MAX_RETRIES = 5  # Maximum number of retries
+RETRY_INTERVAL = 10  # Seconds to wait between retries
+
 
 # auth config
 token = "bty0p3wvcq7bmvayacu7d5r20r3az7"

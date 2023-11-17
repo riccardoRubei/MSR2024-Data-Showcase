@@ -16,15 +16,19 @@ def get_games_metadata(platform_list, platform_paths):
             time.sleep(10)
 
 
+def get_video_metadata(platform_list, platform_paths):
+
+    for plat, path in zip(platform_list, platform_paths):
+        qu.get_video_ids(path,plat)
+
 if __name__ == '__main__':
 
-    platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
-    paths = [cf.PATH_XB_TEMP, cf.PATH_PL_TEMP, cf.PATH_PC_TEMP, cf.PATH_NT_TEMP]
+    platforms = [cf.PATH_PC_VIDEOS]
+    paths = [cf.PATH_PC_TEMP]
     #get_games_metadata(platforms, paths)
     #du.compute_stats(platforms, paths)
-
-
-    qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')
+    get_video_metadata(platforms, paths)
+    #qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')
     #df_video = pd.read_csv('video_ps_76_100.csv', sep=',')
 
 
