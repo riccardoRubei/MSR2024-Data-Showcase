@@ -12,6 +12,7 @@ def get_games_metadata(platform_list, platform_paths):
     for r in ranges:
         for plat, path in zip(platform_list, platform_paths):
             print("downloading ", plat)
+            du.create_path_if_not(path)
             qu.get_games_by_platform(platform=plat, out_dir=path, rating_range=r)
             time.sleep(10)
 
@@ -23,11 +24,11 @@ def get_video_metadata(platform_list, platform_paths):
 
 if __name__ == '__main__':
 
-    platforms = [cf.PATH_PC_VIDEOS]
-    paths = [cf.PATH_PC_TEMP]
-    #get_games_metadata(platforms, paths)
+    platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
+    paths = [cf.PATH_XB, cf.PATH_PL, cf.PATH_PC, cf.PATH_NT]
+    get_games_metadata(platforms, paths)
     #du.compute_stats(platforms, paths)
-    get_video_metadata(platforms, paths)
+    #get_video_metadata(platforms, paths)
     #qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')
     #df_video = pd.read_csv('video_ps_76_100.csv', sep=',')
 

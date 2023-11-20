@@ -22,15 +22,10 @@ PC = "PC"
 
 # local dirs
 
-PATH_PL = "raw_data_IGDB/" + PL + '/'
-PATH_NT = "raw_data_IGDB/" + NT + '/'
-PATH_XB = "raw_data_IGDB/" + XB + '/'
-PATH_PC = "raw_data_IGDB/" + PC + '/'
-
-PATH_PL_TEMP = "IGDB_metadata/" + PL + '/'
-PATH_NT_TEMP = "IGDB_metadata/" + NT + '/'
-PATH_XB_TEMP = "IGDB_metadata/" + XB + '/'
-PATH_PC_TEMP = "IGDB_metadata/" + PC + '/'
+PATH_PL = "IGDB_old/" + PL + '/'
+PATH_NT = "IGDB_old/" + NT + '/'
+PATH_XB = "IGDB_old/" + XB + '/'
+PATH_PC = "IGDB_old/" + PC + '/'
 
 PATH_PL_VIDEOS = "videos/" + PL + '/'
 PATH_NT_VIDEOS = "videos/" + NT + '/'
@@ -50,8 +45,8 @@ PATH_RATINGS= "/igdb_scarper/raw_data_IGDB\\PlayStation_all\\PlayStation_games_r
 
 #error handling
 
-MAX_RETRIES = 5  # Maximum number of retries
-RETRY_INTERVAL = 10  # Seconds to wait between retries
+MAX_RETRIES = 3  # Maximum number of retries
+RETRY_INTERVAL = 5  # Seconds to wait between retries
 
 
 # auth config
@@ -59,5 +54,5 @@ token = "bty0p3wvcq7bmvayacu7d5r20r3az7"
 CLIENT_ID = "m0jr7fmh5098pvc0szzs7zjxcq0cxe"
 AUTH = {'Authorization': "Bearer {}".format(token)}
 GENRES_HEADERS= {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name; limit 500;'}
-#PLATFORM_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name; search "PC"; limit 20;'}
+PLATFORM_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields* ;  limit 500;'}
 #SEARCH_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name,platform; search "Playstation"; limit 50;'}

@@ -5,7 +5,9 @@ import requests, os
 from pandas.errors import EmptyDataError
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-
+from datetime import datetime
+import datetime
+import time
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
@@ -117,10 +119,30 @@ def compute_stats(platform_list, platform_paths):
 
 
 
-import datetime
-import time
 
-def generate_date_intervals_unix(years=20, interval_months=1):
+
+
+def unix_time_to_datetime(unix_time_str):
+    try:
+        # Convert the Unix timestamp string to a floating-point number
+        unix_time = float(unix_time_str)
+
+        # Convert the Unix timestamp to a datetime object
+        datetime_obj = datetime.utcfromtimestamp(unix_time)
+
+        return datetime_obj
+    except ValueError:
+        # Handle the case where the input string is not a valid Unix timestamp
+        return None
+
+# Example usage:
+
+def create_path_if_not(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+def generate_date_intervals_unix(years=10, interval_months=1):
     """
     Generate a list of date tuples covering intervals over a number of years, in Unix timestamp strings.
 
@@ -133,8 +155,10 @@ def generate_date_intervals_unix(years=20, interval_months=1):
     """
 
     # Get the current date and calculate the start year
-    end_date = datetime.date.today()
-    start_year = end_date.year - years
+    end_date_current = datetime.date.today()
+    #end_date = unix_time_to_datetime("1041397200")
+    start_year = 2003 - years
+    end_date = datetime.date(2003, 1, 1)
 
     # Initialize the start date at the beginning of the start year
     current_start_date = datetime.date(start_year, 1, 1)
