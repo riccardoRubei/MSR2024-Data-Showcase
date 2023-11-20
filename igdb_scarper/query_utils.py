@@ -271,6 +271,7 @@ def get_platform_ids():
         # res.write('id,platform\n')
         for platform in json_file:
             res.write(str(platform.get('id')) + ',' + str(platform.get('name')) + '\n')
+            
 
 def get_platform_id(csv, type):
     df_play = pd.read_csv(csv, sep=',')

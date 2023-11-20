@@ -54,5 +54,5 @@ token = "bty0p3wvcq7bmvayacu7d5r20r3az7"
 CLIENT_ID = "m0jr7fmh5098pvc0szzs7zjxcq0cxe"
 AUTH = {'Authorization': "Bearer {}".format(token)}
 GENRES_HEADERS= {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name; limit 500;'}
-PLATFORM_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields* ;  limit 500;'}
+PLATFORM_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields id,name ;  limit 500;'}
 #SEARCH_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name,platform; search "Playstation"; limit 50;'}
