@@ -134,67 +134,69 @@ def build_header_games(platform,rating_range):
     return header
 
 def get_video_ids(src, out_path):
+
     if not os.path.exists(out_path):
         os.makedirs(out_path)
 
-    with open(out_path + 'video_cat.csv', 'a', encoding='utf8', errors='ignore') as video_file, \
-         open(out_path + 'video_ids.csv', 'a', encoding='utf8', errors='ignore') as game_file:
+    with open(out_path + 'video_cat.csv', 'a', encoding='utf8', errors='ignore') as video_file:
+        with open(out_path + 'video_ids.csv', 'a', encoding='utf8', errors='ignore') as game_file:
+            df_videos = pd.read_csv(out_path + 'video_ids.csv')
 
-        df_videos = pd.read_csv(out_path + 'video_ids.csv')
-
-        for data in os.listdir(src):
-            try:
-                df_games = pd.read_csv(src + data, sep=',')
-                for game_id in df_games['id'].values:
-                    if game_id in df_videos['id_game'].values:
-                        print("already downloaded")
-                        continue
-
-                    list_video_id = []
-                    q = build_query_video(game_id)
-                    header = {
-                        'headers': {
-                            'Client-ID': cf.CLIENT_ID,
-                            'Authorization': 'Bearer ' + cf.token
-                        },
-                        'data': q
-                    }
-
-                    for attempt in range(cf.MAX_RETRIES):
-
-                        try:
-                            response = post(cf.VIDEOS_URL, **header)
-
-                            break
-                        except (ConnectionError, Timeout, MaxRetryError) as e:
-                            print(f"Network error occurred: {e}")
-                            # Optional: Implement a retry mechanism or continue to the next iteration
-                            print(f"Attempt {attempt + 1} failed: {e}")
-                            if attempt < cf.MAX_RETRIES - 1:
-                                print(f"Retrying in {cf.RETRY_INTERVAL} seconds...")
-                                time.sleep(cf.RETRY_INTERVAL)
-                            else:
-                                print("Max retries reached, moving to the next item.")
-                                break
+            for data in os.listdir(src):
+                try:
+                    df_games = pd.read_csv(src + data, sep=',')
+                    for game_id in df_games['id'].values:
+                        if game_id in df_videos['id_game'].values:
+                            print("already downloaded")
                             continue
 
-                    if len(response.json()) > 0:
-                        for v in response.json():
-                            print("Writing id")
-                            if 'video_id' in v.keys():
-                                url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
-                                list_video_id.append(url_video)
-                            if 'name' in v.keys():
-                                video_file.write(f"{url_video},{v['name']}\n")
-                        video_ids = '#'.join(list_video_id)
-                        game_file.write(f"{v['game']},{video_ids}\n")
-                    else:
-                        game_file.write(f"{game_id},Missing\n")
-                        print("No video")
-                    time.sleep(1)
+                        list_video_id = []
+                        q = build_query_video(game_id)
+                        header = {
+                            'headers': {
+                                'Client-ID': cf.CLIENT_ID,
+                                'Authorization': 'Bearer ' + cf.token
+                            },
+                            'data': q
+                        }
 
-            except RemoteDisconnected as e:
-                print(f"Error occurred: {e}")
+                        for attempt in range(cf.MAX_RETRIES):
+
+                            try:
+                                response = post(cf.VIDEOS_URL, **header)
+
+                                break
+                            except (ConnectionError, Timeout, MaxRetryError) as e:
+                                print(f"Network error occurred: {e}")
+                                # Optional: Implement a retry mechanism or continue to the next iteration
+                                print(f"Attempt {attempt + 1} failed: {e}")
+                                if attempt < cf.MAX_RETRIES - 1:
+                                    print(f"Retrying in {cf.RETRY_INTERVAL} seconds...")
+                                    time.sleep(cf.RETRY_INTERVAL)
+                                else:
+                                    print("Max retries reached, moving to the next item.")
+                                    break
+                                continue
+
+                        if len(response.json()) > 0:
+                            for v in response.json():
+                                print("Writing id")
+                                if 'video_id' in v.keys():
+                                    url_video = f"{cf.YOU_TUBE_URL}{v['video_id']}"
+                                    list_video_id.append(url_video)
+                                if 'name' in v.keys():
+                                    video_file.write(f"{url_video},{v['name']}\n")
+                            video_ids = '#'.join(list_video_id)
+                            game_file.write(f"{v['game']},{video_ids}\n")
+                        else:
+                            game_file.write(f"{game_id},Missing\n")
+                            print("No video")
+                        time.sleep(1)
+
+                except RemoteDisconnected as e:
+                    print(f"Error occurred: {e}")
+                except EmptyDataError:
+                    continue
 
 
 # old function
