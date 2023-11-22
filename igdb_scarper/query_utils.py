@@ -52,7 +52,10 @@ def get_screenshot(game_id):
     return df
 
 def get_all_times(df_path):
-    df = pd.read_csv(df_path)
+    try:
+        df = pd.read_csv(df_path)
+    except:
+        return 0
     res_df = pd.DataFrame()
     res_dict = {}
     for game_name in df.name.unique():
@@ -66,13 +69,17 @@ def get_all_screenshots(df_path):
     #create directory if not exists
     if not os.path.exists(cf.PATH_SCREENSHOTS):
         os.makedirs(cf.PATH_SCREENSHOTS)
-    errors = pd.read_csv("errors.csv")
+    errors = pd.read_csv("progress/errors.csv")
 
-    df = pd.read_csv(df_path)
+    try:
+        df = pd.read_csv(df_path)
+    except:
+        return 0
+    
     for index,row in df.iterrows():
         id = row['id']
 
-        genres = ast.literal_eval(row['genres']) if row['genres'] != 'Missing' else []
+        genres = ast.literal_eval(row['genres']) if 'genres' in df.columns and row['genres'] != 'Missing' else []
         
         screenshots = get_screenshot(id)
 
