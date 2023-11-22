@@ -22,10 +22,10 @@ PC = "PC"
 
 # local dirs
 
-PATH_PL = "IGDB_old/" + PL + '/'
-PATH_NT = "IGDB_old/" + NT + '/'
-PATH_XB = "IGDB_old/" + XB + '/'
-PATH_PC = "IGDB_old/" + PC + '/'
+PATH_PL = "IGDB_metadata/" + PL + '/'
+PATH_NT = "IGDB_metadata/" + NT + '/'
+PATH_XB = "IGDB_metadata/" + XB + '/'
+PATH_PC = "IGDB_metadata/" + PC + '/'
 
 PATH_PL_VIDEOS = "videos/" + PL + '/'
 PATH_NT_VIDEOS = "videos/" + NT + '/'
