@@ -3,4 +3,6 @@ __pycache__/
 igdb_scarper/__pycache__/
 venv/
 igdb_scarper/main.py
-scripts/dataset.csv
+scripts/dataset_hltb.csv
+scripts/dataset_igdb_hltb.csv
+scripts/dataset_igdb.csv
