@@ -8,6 +8,7 @@ from requests.adapters import HTTPAdapter
 from datetime import datetime
 import datetime
 import time
+import csv
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
@@ -194,5 +195,38 @@ def generate_date_intervals_unix(years=10, interval_months=1):
 
     return intervals
 
-# Test the function with default parameters
 
+
+def merge_csv_2(file1, file2, output_file):
+
+    # Read the CSV files into DataFrames
+    df1 = pd.read_csv(file1, sep= ',')
+    df2 = pd.read_csv(file2, sep= ',')
+
+    # Concatenate the DataFrames along the rows
+    merged_df = pd.concat([df1, df2], ignore_index=True)
+
+    # Save the merged DataFrame to a new CSV file
+    merged_df.to_csv(output_file, index=False)
+
+def merge_csv(files, output_file):
+    all_rows = set()
+    header_saved = False
+
+    with open(output_file, 'w', newline='', encoding='utf-8') as fout:
+        writer = csv.writer(fout)
+
+        for file in files:
+            with open(file, 'r', newline='', encoding='utf-8') as fin:
+                reader = csv.reader(fin)
+                header = next(reader)
+
+                if not header_saved:
+                    writer.writerow(header)  # Write the header only once.
+                    header_saved = True
+
+                for row in reader:
+                    row_tuple = tuple(row)  # Convert the list to a tuple for set operations
+                    if row_tuple not in all_rows:
+                        all_rows.add(row_tuple)
+                        writer.writerow(row)
