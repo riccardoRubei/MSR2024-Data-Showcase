@@ -145,7 +145,7 @@ def get_video_ids(src, out_path):
     if not os.path.exists(out_path):
         os.makedirs(out_path)
 
-    with open(out_path + 'video_cat.csv', 'a', encoding='utf8', errors='ignore') as video_file:
+    with open(out_path + 'video_cat_nt.csv', 'a', encoding='utf8', errors='ignore') as video_file:
         with open(out_path + 'video_ids.csv', 'a', encoding='utf8', errors='ignore') as game_file:
             df_videos = pd.read_csv(out_path + 'video_ids.csv')
 
