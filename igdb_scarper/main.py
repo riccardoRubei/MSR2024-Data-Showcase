@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 import query_utils as qu
 import data_utils as du
 import config as cf
@@ -24,9 +24,15 @@ def get_video_metadata(platform_list, platform_paths):
 
 if __name__ == '__main__':
 
-    platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
-    paths = [cf.PATH_XB, cf.PATH_PL, cf.PATH_PC, cf.PATH_NT]
-    get_games_metadata(platforms, paths)
+    dataset_path = os.path.join("screenshots", "genres")
+    images, labels = du.load_images_and_labels(dataset_path,15)
+    print(images.shape, labels.shape)
+    images2, labels2 = du.load_images_and_labels(dataset_path,"Turn-based strategy (TBS)")
+    print(images2.shape, labels2.shape)
+
+    #platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
+    #paths = [cf.PATH_XB, cf.PATH_PL, cf.PATH_PC, cf.PATH_NT]
+    #get_games_metadata(platforms, paths)
     #du.compute_stats(platforms, paths)
     #get_video_metadata(platforms, paths)
     #qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')

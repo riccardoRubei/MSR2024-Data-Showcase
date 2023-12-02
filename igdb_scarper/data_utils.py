@@ -8,11 +8,48 @@ from requests.adapters import HTTPAdapter
 from datetime import datetime
 import datetime
 import time
+import numpy as np
 import csv
+import cv2
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
     yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+
+def load_images_and_labels(path, genre):
+    images = []
+    labels = []
+
+    genres = pd.read_csv(os.path.join("..","genres.csv"))
+
+    if isinstance(genre, str):
+        genre_no = genres[genres["genre"] == genre]["genre_id"].values[0]
+    else:
+        genre_no = genre
+        genre = genres[genres["genre_id"] == genre_no]["genre"].values[0]
+
+
+    class_path = os.path.join(path, str(genre))
+
+    for filename in os.listdir(class_path):
+        if filename[0] == '.':
+            continue
+        img_path = os.path.join(class_path, filename)
+                
+        img = cv2.imread(img_path)
+        if img is None:
+            continue
+        
+        img = img / 255.0
+        
+        images.append(img)
+        labels.append(genre_no)
+    
+    images = np.array(images)
+    labels = np.array(labels)
+    
+    return images, labels
+
 
 
 def download_image(image_url, outs, size = 'thumb'):
