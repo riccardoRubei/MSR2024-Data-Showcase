@@ -120,9 +120,6 @@ def compute_stats(platform_list, platform_paths):
 
 
 
-
-
-
 def unix_time_to_datetime(unix_time_str):
     try:
         # Convert the Unix timestamp string to a floating-point number
