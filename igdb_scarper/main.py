@@ -17,13 +17,15 @@ def get_games_metadata(platform_list, platform_paths):
             time.sleep(10)
 
 
-def get_video_metadata(platform_list, platform_paths):
-
-    for plat, path in zip(platform_list, platform_paths):
-        qu.get_video_ids(path,plat)
 
 if __name__ == '__main__':
 
+<<<<<<< HEAD
+    metadata_src = [cf.PATH_PC]
+    video_dst = [cf.PATH_PC_VIDEOS]
+
+    #qu.get_genres()
+=======
     dataset_path = os.path.join("screenshots", "genres")
     images, labels = du.load_images_and_labels(dataset_path,15)
     print(images.shape, labels.shape)
@@ -33,10 +35,16 @@ if __name__ == '__main__':
     #platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
     #paths = [cf.PATH_XB, cf.PATH_PL, cf.PATH_PC, cf.PATH_NT]
     #get_games_metadata(platforms, paths)
+>>>>>>> b86a6385a620903a545581604840367457ab8d70
     #du.compute_stats(platforms, paths)
     #get_video_metadata(platforms, paths)
-    #qu.get_video_ids(cf.PATH_PL_TEMP+'PlayStation_games_rating_between_1698811200_1701320400.csv', 'video_ps_76_100.csv', 'video_cat.csv')
+
+    # for src, dest in zip(metadata_src,video_dst):
+    #     qu.get_video_ids(src, dest)
     #df_video = pd.read_csv('video_ps_76_100.csv', sep=',')
+    root = 'videos/'
+    list_files =[root+'video_cat_nt.csv',root+'video_cat_pc.csv', root+'video_cat_pl.csv', root+'video_cat_xb.csv']
+    du.merge_csv(list_files,'all_videos.csv')
 
 
 

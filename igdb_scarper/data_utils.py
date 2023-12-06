@@ -11,6 +11,7 @@ import time
 import numpy as np
 import csv
 import cv2
+import matplotlib.pyplot as plt
 
 def download_video(id_video):
     yt = YouTube('http://youtube.com/watch?v='+str(id_video))
@@ -157,9 +158,6 @@ def compute_stats(platform_list, platform_paths):
 
 
 
-
-
-
 def unix_time_to_datetime(unix_time_str):
     try:
         # Convert the Unix timestamp string to a floating-point number
@@ -267,3 +265,85 @@ def merge_csv(files, output_file):
                     if row_tuple not in all_rows:
                         all_rows.add(row_tuple)
                         writer.writerow(row)
+
+
+
+
+def plot():
+    # Data
+    data = {
+        'Platform': ['Xbox'] * 5 + ['Playstation'] * 5 + ['Nintendo'] * 5 + ['PC'] * 5,
+        'Genres': ['Shooter', 'RPG', 'Platform', 'Simulator', 'Fighting',
+                   'Shooter', 'RPG', 'Platform', 'Puzzle', 'Simulator',
+                   'Platform', 'Puzzle', 'Shooter', 'RPG', 'Simulator',
+                   'Adventure', 'Simulator', 'RPG', 'Shooter', 'Indie'],
+        'N. Games': [2999, 1620, 1479, 1163, 1012,
+                     3828, 2985, 1969, 1794, 1789,
+                     3410, 3280, 2458, 2297, 1817,
+                     10041, 9014, 8873, 8782, 8212]
+    }
+    df = pd.DataFrame(data)
+
+    # Colors for each platform
+    colors = {
+        'Xbox': 'green',
+        'Playstation': 'darkblue',
+        'Nintendo': 'red',
+        'PC': 'black'
+    }
+
+    for platform in df['Platform'].unique():
+        # Filter the data for the specific platform
+        subset = df[df['Platform'] == platform]
+
+        # Bar plot
+        plt.figure(figsize=(8, 6))
+        plt.bar(subset['Genres'], subset['N. Games'], color=colors[platform])
+        #plt.title(platform)
+        plt.ylabel('Number of Games',fontsize= 22)
+        plt.xticks(subset['Genres'], rotation=45, fontsize=22)
+        plt.tight_layout()
+
+        # Save the plot as a PNG file
+        plt.savefig(f'{platform}_games_plot.png')
+
+        # Show the plot
+        plt.show()
+def subplots():
+    data = {
+        'Platform': ['Xbox'] * 5 + ['Playstation'] * 5 + ['Nintendo'] * 5 + ['PC'] * 5,
+        'Genres': ['Shooter', 'RPG', 'Platform', 'Simulator', 'Fighting',
+                   'Shooter', 'RPG', 'Platform', 'Puzzle', 'Simulator',
+                   'Platform', 'Puzzle', 'Shooter', 'RPG', 'Simulator',
+                   'Adventure', 'Simulator', 'RPG', 'Shooter', 'Indie'],
+        'N. Games': [2999, 1620, 1479, 1163, 1012,
+                     3828, 2985, 1969, 1794, 1789,
+                     3410, 3280, 2458, 2297, 1817,
+                     10041, 9014, 8873, 8782, 8212]
+    }
+    df = pd.DataFrame(data)
+
+    # Colors for each platform
+    colors = {
+        'Xbox': 'green',
+        'Playstation': 'darkblue',
+        'Nintendo': 'red',
+        'PC': 'black'
+    }
+
+    # Creating bar plots
+    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+    axes = axes.flatten()  # Flatten the axes array for easy iteration
+
+    for ax, platform in zip(axes, df['Platform'].unique()):
+        # Filter the data for the specific platform
+        subset = df[df['Platform'] == platform]
+        # Bar plot
+        ax.bar(subset['Genres'], subset['N. Games'], color=colors[platform])
+        ax.set_title(platform)
+        #ax.set_xlabel()
+        ax.set_ylabel('Number of Games')
+        ax.set_xticklabels(subset['Genres'], rotation=45)
+
+    plt.tight_layout()
+    plt.show()
