@@ -1,3 +1,4 @@
+genre_id,genre
 4,Fighting
 5,Shooter
 7,Music
@@ -11,8 +12,8 @@
 15,Strategy
 16,Turn-based strategy (TBS)
 24,Tactical
-26,Quiz/Trivia
-25,Hack and slash/Beat 'em up
+26,Quiz
+25,Hack and slash
 30,Pinball
 31,Adventure
 33,Arcade
