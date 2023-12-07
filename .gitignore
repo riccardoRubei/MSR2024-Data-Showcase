@@ -3,6 +3,6 @@ __pycache__/
 miner_components/__pycache__/
 venv/
 miner_components/main.py
-scripts/dataset_hltb.csv
-scripts/dataset_igdb_hltb.csv
-scripts/dataset_igdb.csv
+data_analysis/dataset_hltb.csv
+data_analysis/dataset_igdb_hltb.csv
+data_analysis/dataset_igdb.csv
