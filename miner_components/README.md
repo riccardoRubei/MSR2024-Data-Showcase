@@ -40,16 +40,23 @@ get_games_igdb(platforms, paths)
 ```
 where the values are stored in the `config.py` file.
 
-# Download videos
+## Download videos
 
 The `download_video` function download the actual .MP4 from the all_videos.csv files
 
-### Function Signature
 
 ```
 download_video(cf.VIDEO_DATA)
 ```
 
+
+## Download screenshots
+To download the screenshots contained in the Zenodo archive, please run the following function:
+
+```
+download_screenshots(cf.PATH_SCREENSHOTS, cf.GENRE_FOLDER, cf.GENRE_TEST)
+```
+where the three parameters represent the root folder of the screenshot, the genre folder, and the string that represents the genre, e.g., 'Action'
 
 
 # HLTB Miner
