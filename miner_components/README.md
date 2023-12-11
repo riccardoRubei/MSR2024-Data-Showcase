@@ -8,7 +8,7 @@
   
 - `main.py`: The primary script that initiates and controls the flow of the project.
   
-- `platforms.csv`: It represents the all the platform available in IGDB and their corresponding IDs
+- `platforms.csv`: It represents all the platforms available in IGDB and their corresponding IDs
   
 - `query_utils.py`: Provides utility functions specifically designed for querying and data retrieval purposes.
 
@@ -20,70 +20,43 @@
 To replicate the data collected in this study, you need a Twitch Account. To this end, you can follow the instructions available [here](https://api-docs.igdb.com/#getting-started)
 
 
-# Download Game Metadata
+# Download IGDB game Metadata
 
 The `get_games_by_platform` function is used to download and preprocess game metadata based on the specified platform and rating range. The processed data is then saved as a CSV file in the designated output directory. It is contained in `data_utils.py` module.
 
 
 ```python
-def get_games_by_platform(platform, outdir, rating_range)
+get_games_igdb(platforms, paths)
 ```
-
-### Parameters:
-
-- **platform** (String): 
-  - Description: The gaming platform for which metadata needs to be fetched.
-  - Example values: "PC", "PlayStation", "Xbox", etc.
-
-- **outdir** (String): 
-  - Description: The directory path where the resulting CSV file will be saved. If the directory does not exist, it will be created.
-
-- **rating_range** (Integer tuple): 
-  - Description: It defines the min and max ratings of the games that need to be fetched. 
-
+where platforms and paths are lists of platform families and the folder respectively.  
 
 ### Example usage
 
-To get games belonging to all Xbox platforms with a rating between 0 and 25, you can run the following command:
-```python
-get_games_by_platform(platform="Xbox", outdir="your_local_path", rating_range=(0, 25))
+To collect all the platform metadata, run the following script
+```     
+platforms = [cf.XB, cf.PL, cf.PC, cf.NT]
+paths = [cf.PATH_XB, cf.PATH_PL, cf.PATH_PC, cf.PATH_NT]
+get_games_igdb(platforms, paths)
 ```
-
-Please note that you can use all the constant available in the `config.py` file.
+where the values are stored in the `config.py` file.
 
 # Download videos
 
-The `get_video_ids` function retrieve video IDs associated with game IDs from a given dataset and writes them to a specified output file.
+The `download_video` function download the actual .MP4 from the all_videos.csv files
 
 ### Function Signature
 
-```python
-def get_video_ids(data, outpath)
+```
+download_video(cf.VIDEO_DATA)
 ```
 
-### Parameters:
-
-- **data** (String): 
-  - Description: The path to the CSV file containing game metadata.
-  
-- **outpath** (String): 
-  - Description: The path where the resulting CSV file will be saved. This file will list the game IDs and their associated video IDs.
-
-
-To collect the available video for PlayStation games, you can run:
-
-```python
-get_video_ids('csv_file_with_game_IDs', 'out.csv')
-```
-
-To download the actual video, please use the function `download_video(id_video)` in the data_utils.py file
 
 
 # HLTB Miner
 
 ## Setup:
 
-To setup the HLTB Miner, download the zip from the url: https://github.com/dangeloandrea14/hl2b_python_API
+To set up the HLTB Miner, download the zip from the url: https://github.com/dangeloandrea14/hl2b_python_API
 and install it via pip, e.g.,
 
 ``` pip install ../hl2b_python_API/howlongtobeapty ```
@@ -91,7 +64,7 @@ and install it via pip, e.g.,
 depending on its location on your machine.
 
 
-# Download Game Metadata
+# Download Game completion metadata
 
 The `get_time` function is used to POST a request for a single game, given a title, returning a Pandas DataFrame with all the attributes.
 
