@@ -14,9 +14,12 @@ import cv2
 import matplotlib.pyplot as plt
 
 
-def download_video(id_video):
-    yt = YouTube('http://youtube.com/watch?v='+str(id_video))
-    yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+def download_video(input_video):
+    df_video=pd.read_csv(input_video)
+    list_videos = df_video['id_video'].values.astype(str)
+    for vid in list_videos:
+        yt = YouTube(vid)
+        yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
 
 
 def load_images_and_labels(path, genre):
@@ -296,4 +299,4 @@ def plot():
         # Show the plot
         plt.show()
 
-
+download_video()

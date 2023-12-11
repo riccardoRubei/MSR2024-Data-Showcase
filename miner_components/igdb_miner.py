@@ -195,3 +195,5 @@ def get_platform_id(csv, type):
         if str(plat).find(type) != -1:
             list_ids.append(key)
     return list_ids
+
+
