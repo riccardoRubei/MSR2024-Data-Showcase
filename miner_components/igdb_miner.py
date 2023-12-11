@@ -180,7 +180,7 @@ def get_games_by_platform(platform, out_dir, rating_range):
 
 def get_platform_ids():
     response = post(cf.PLATFORM_URL, **cf.PLATFORM_HEADERS)
-    with open('platforms.csv', 'a', encoding='utf8', errors='ignore') as res:
+    with open(cf.PATH_PLATFORMS, 'a', encoding='utf8', errors='ignore') as res:
         json_file = response.json()
         print("response: %s" % str(response.json()))
         # res.write('id,platform\n')

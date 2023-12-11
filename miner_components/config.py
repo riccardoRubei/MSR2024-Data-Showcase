@@ -30,13 +30,22 @@ PATH_NT_VIDEOS = "videos/" + NT + '/'
 PATH_XB_VIDEOS = "videos/" + XB + '/'
 PATH_PC_VIDEOS = "videos/" + PC + '/'
 
+# downloaded video
+VIDEO_DATA = '../all_video.csv'
 
-PATH_SCREENSHOTS = "screenshots"
+
+
+# Screenshot download parameters
+PATH_SCREENSHOTS = "screenshots/"
 PATH_GENRES = "genres.csv"
+GENRE_FOLDER = 'genres/'
+GENRE_TEST = 'Turn-based strategy (TBS)'
 
 
 
-PATH_PLATFORMS = "platforms.csv"
+
+
+PATH_PLATFORMS = "final_dataset/platforms.csv"
 
 
 
@@ -47,11 +56,15 @@ RETRY_INTERVAL = 5  # Seconds to wait between retries
 
 
 # auth config
-token = "bty0p3wvcq7bmvayacu7d5r20r3az7"
-CLIENT_ID = "m0jr7fmh5098pvc0szzs7zjxcq0cxe"
+token = "your IGDB token"
+CLIENT_ID = "your IGDB"
 AUTH = {'Authorization': "Bearer {}".format(token)}
 
 # headers
 GENRES_HEADERS= {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name; limit 500;'}
 PLATFORM_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields id,name ;  limit 500;'}
 #SEARCH_HEADERS =  {'headers': {'Client-ID': CLIENT_ID, 'Authorization': 'Bearer ' + token},'data': 'fields name,platform; search "Playstation"; limit 50;'}
+
+#HLTB paramenters
+
+HLTB_DATA = '../hltb.csv'
