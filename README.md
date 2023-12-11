@@ -32,6 +32,10 @@ Andrea D'Angelo(1), Claudio Di Sipio, Cristiano Politowsky (2) and Riccardo Rube
 
 # Installation
 
-@TODO
+The requirements.txt file contains all libraries that need to be in the pip installation in order to entirely reproduce the data gathering process.
+
+Moreover, the code for the HLTB API must be downloaded from https://github.com/dangeloandrea14/hl2b_python_API and locally installed via pip.
+This is because the HLTB API version used for this project is a custom version, augmented with the possibility of retrieving more attributes.
+
 
 
