@@ -25,7 +25,7 @@ def download_video(input_video):
 def load_images_and_labels(path, genre):
     images = []
     labels = []
-    genres = pd.read_csv(os.path.join("..","genres.csv"))
+    genres = pd.read_csv(os.path.join("..","final_dataset","genres.csv"))
     if isinstance(genre, str):
         genre_no = genres[genres["genre"] == genre]["genre_id"].values[0]
     else:

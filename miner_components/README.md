@@ -77,3 +77,31 @@ get_video_ids('csv_file_with_game_IDs', 'out.csv')
 ```
 
 To download the actual video, please use the function `download_video(id_video)` in the data_utils.py file
+
+
+# HLTB Miner
+
+## Setup:
+
+To setup the HLTB Miner, download the zip from the url: https://github.com/dangeloandrea14/hl2b_python_API
+and install it via pip, e.g.,
+
+``` pip install ../hl2b_python_API/howlongtobeapty ```
+
+depending on its location on your machine.
+
+
+# Download Game Metadata
+
+The `get_time` function is used to POST a request for a single game, given a title, returning a Pandas DataFrame with all the attributes.
+
+
+```python
+def get_time(game_name)
+```
+
+Similarly, the `get_all_times` function iterates over `get_time` to obtain info for all the games in a list, given the path to a Pandas DF containing a column named 'name' where the game titles are stored.
+
+```python
+def get_all_times(df_path)
+```
