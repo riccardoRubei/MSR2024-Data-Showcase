@@ -1,5 +1,6 @@
 from howlongtobeatpy import HowLongToBeat
 import pandas as pd
+from textdistance import levenshtein
 
 def get_time(game_name):
     ## Returns a df [title_found, main, extra, completionist]. Returns tuple of 0 if not found.
@@ -33,3 +34,9 @@ def get_all_times(df_path):
 
     res_df = pd.concat(res_dict.values(), ignore_index=True)
     return res_df
+
+def levenshtein_filtering(hl2b_data):
+    hl2b_data['levenshtein'] = hl2b_data.apply(lambda x: levenshtein.distance(x['name'],  x['title_found']), axis=1)
+    hl2b_data = hl2b_data[hl2b_data['levenshtein'] < 3]
+    
+    return hl2b_data
